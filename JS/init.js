@@ -3,13 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	const yearInput = document.getElementById("year");
 	const typeSelect = document.getElementById("type");
 	const searchButton = document.getElementById("search-button");
+	const resultsContainer = document.getElementById("results-container");
+	const resultsNav = document.getElementById("results-nav");
 	const authContainer = document.getElementById("auth-container");
 	const signInTrigger = document.getElementById("sign-in-trigger");
 	const signUpTrigger = document.getElementById("sign-up-trigger");
 
 	const initialAuthMarkup = authContainer ? authContainer.innerHTML : "";
 
-	if (!titleInput || !yearInput || !typeSelect || !searchButton) {
+	if (!titleInput || !yearInput || !typeSelect || !searchButton || !resultsContainer || !resultsNav) {
 		return;
 	}
 
