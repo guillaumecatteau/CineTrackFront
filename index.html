@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="menu-bar">
+        <div class="logo">
+            <img src="images/logo_CineTrack.png" alt="CineTrack logo" class="logo-image">
+        </div>
+        <div class="menu-actions">
+            <button type="button" class="btn btn-secondary">Sign In</button>
+            <button type="button" class="btn btn-primary">Sign Up</button>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="sectionDark">
+            <form class="search-form container" action="#" method="get">
+                <div class="field-group">
+                    <input type="text" id="title" name="title" placeholder="TITLE">
+                </div>
+
+                <div class="field-group">
+                    <input type="number" id="year" name="year" placeholder="YEARS" min="1888" max="2100">
+                </div>
+
+                <div class="field-group">
+                    <select id="type" name="type">
+                        <option value="" selected>CATEGORIES</option>
+                        <option value="movie">MOVIE</option>
+                        <option value="series">SERIES</option>
+                        <option value="episode">EPISODE</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="search-button" disabled>Search</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="JS/init.js"></script>
+</body>
+
+</html>
