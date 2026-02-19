@@ -5,7 +5,11 @@
 // ═══════════════════════════════════════════════════
 // IMPORTS
 // ═══════════════════════════════════════════════════
-import { handleConnexion, updateHeaderButtons } from './connexion.js';
+import AuthManager from './Manager/AuthManager.js';
+import SearchManager from './Manager/SearchManager.js';
+import TagManager from './Manager/TagManager.js';
+import UserMovieManager from './Manager/UserMovieManager.js';
+import { handleConnexion, updateHeaderButtons, initConnexion } from './connexion.js';
 
 // ═══════════════════════════════════════════════════
 // CONSTANTES ET ÉLÉMENTS DOM
@@ -253,3 +257,23 @@ export function initInterface() {
 		signUpTrigger.addEventListener("click", renderSignUpForm);
 	}
 }
+
+// ═══════════════════════════════════════════════════
+// INITIALISATION AU CHARGEMENT DE LA PAGE
+// ═══════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+	// Initialiser l'interface (recherche et auth)
+	initInterface();
+	
+	// Initialiser la connexion (vérifier si déjà connecté)
+	initConnexion(renderSignInForm, renderSignUpForm);
+});
+
+// ═══════════════════════════════════════════════════
+// EXPORTS GLOBAUX (pour tests/debugging)
+// ═══════════════════════════════════════════════════
+window.AuthManager = AuthManager;
+window.SearchManager = SearchManager;
+window.TagManager = TagManager;
+window.UserMovieManager = UserMovieManager;
