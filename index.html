@@ -1,63 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineTrack</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <nav class="menu-bar">
-        <div class="logo">
-            <img src="images/logo_CineTrack.png" alt="CineTrack logo" class="logo-image">
-        </div>
-        <div class="menu-actions" id="auth-container">
-            <button type="button" class="btn btn-primary" id="sign-up-trigger"><span class="btn-icon" aria-hidden="true">+</span>Sign Up</button>
-            <button type="button" class="btn btn-secondary" id="sign-in-trigger">Sign In</button>
-        </div>
+      <div class="logo">
+        <img
+          src="images/logo_CineTrack.png"
+          alt="CineTrack logo"
+          class="logo-image"
+        />
+      </div>
+      <div class="menu-actions" id="auth-container">
+        <button type="button" class="btn btn-primary" id="sign-up-trigger">
+          <span class="btn-icon" aria-hidden="true">+</span>Sign Up
+        </button>
+        <button type="button" class="btn btn-secondary" id="sign-in-trigger">
+          Sign In
+        </button>
+      </div>
     </nav>
 
     <main class="content">
-        <div class="sectionDark">
-            <form class="search-form container" action="#" method="get" autocomplete="off">
-                <div class="field-group">
-                    <input type="text" id="title" name="title" placeholder="TITLE" autocomplete="off" autocapitalize="off" spellcheck="false">
-                </div>
+      <div class="sectionDark">
+        <form
+          class="search-form container"
+          action="#"
+          method="get"
+          autocomplete="off"
+        >
+          <div class="field-group">
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="TITLE"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+            />
+          </div>
 
-                <div class="field-group">
-                    <input type="number" id="year" name="year" placeholder="YEARS" min="1888" max="2100" autocomplete="off">
-                </div>
+          <div class="field-group">
+            <input
+              type="number"
+              id="year"
+              name="year"
+              placeholder="YEAR"
+              min="1888"
+              max="2100"
+              autocomplete="off"
+            />
+          </div>
 
-                <div class="field-group">
-                    <select id="type" name="type">
-                        <option value="" selected>CATEGORIES</option>
-                        <option value="movie">MOVIE</option>
-                        <option value="series">SERIES</option>
-                        <option value="episode">EPISODE</option>
-                    </select>
-                </div>
+          <div class="field-group">
+            <select id="type" name="type">
+              <option value="" selected>ALL CATEGORIES</option>
+              <option value="movie">MOVIE</option>
+              <option value="tv">TV SERIES</option>
+            </select>
+          </div>
 
-                <button type="submit" class="btn btn-primary" id="search-button" disabled>Search</button>
-            </form>
+          <button type="submit" class="btn btn-primary" id="search-button">
+            Search
+          </button>
+        </form>
+      </div>
+      <div class="results container" id="results-container">
+        <!-- Movie covers will be dynamically inserted here -->
+      </div>
+      <div class="results-nav container" id="results-nav"></div>
+
+      <div class="signup-overlay" id="signup-overlay" aria-hidden="true">
+        <div
+          class="signup-overlay-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="signup-overlay-title"
+        >
+          <div class="signup-overlay-header">
+            <h2 id="signup-overlay-title">Create your account</h2>
+          </div>
+          <div id="signup-overlay-content"></div>
         </div>
-        <div class="results container" id="results-container">
-            <!-- Movie covers will be dynamically inserted here -->
-        </div>
-        <div class="results-nav container" id="results-nav"></div>
-
-        <div class="signup-overlay" id="signup-overlay" aria-hidden="true">
-            <div class="signup-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="signup-overlay-title">
-                <div class="signup-overlay-header">
-                    <h2 id="signup-overlay-title">Create your account</h2>
-                </div>
-                <div id="signup-overlay-content"></div>
-            </div>
-        </div>
+      </div>
     </main>
 
-    <script type="module" src="JS/init.js"></script>
-</body>
-
+    <script type="module" src="JS/init.js?v=3"></script>
+  </body>
 </html>
