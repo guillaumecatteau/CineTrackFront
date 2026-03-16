@@ -343,6 +343,258 @@ class TagManager {
             return { success: false, message: "Erreur réseau" };
         }
     }
+
+    // ═══════════════════════════════════════════════════
+    // MÉTHODES POUR TMDb (films identifiés par tmdb_id + media_type)
+    // ═══════════════════════════════════════════════════
+
+    /**
+     * Ajouter un film TMDb avec ses tags (crée le film automatiquement si nécessaire)
+     * @param {number} userId - ID de l'utilisateur
+     * @param {number} tmdbId - ID TMDb du film
+     * @param {string} mediaType - Type de média ('movie' ou 'tv')
+     * @param {Array<string>} tags - Liste des tags
+     * @param {boolean} isWatched - Film déjà vu ou non
+     * @param {number|null} rating - Note du film
+     * @returns {Promise<Object>} Réponse de l'API
+     */
+    static async addTmdbMovieWithTags(userId, tmdbId, mediaType = 'movie', tags = [], isWatched = false, rating = null) {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({
+            action: 'addTmdbMovieWithTags',
+            userId: userId,
+            tmdbId: tmdbId,
+            mediaType: mediaType,
+            tags: tags,
+            isWatched: isWatched,
+            rating: rating
+        });
+
+        try {
+            const result = await fetch(TagManager.API_URL, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log(response);
+
+            if (response.success) {
+                console.log("Film TMDb ajouté avec tags");
+            } else {
+                console.warn("Échec de l'ajout du film TMDb:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête addTmdbMovieWithTags :", error);
+            return { success: false, message: "Erreur réseau" };
+        }
+    }
+
+    /**
+     * Récupérer les tags d'un film TMDb pour un utilisateur
+     * @param {number} userId - ID de l'utilisateur
+     * @param {number} tmdbId - ID TMDb du film
+     * @param {string} mediaType - Type de média ('movie' ou 'tv')
+     * @returns {Promise<Object>} Réponse de l'API avec les tags
+     */
+    static async getTagsByTmdbId(userId, tmdbId, mediaType = 'movie') {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({
+            action: 'getTagsByTmdbId',
+            userId: userId,
+            tmdbId: tmdbId,
+            mediaType: mediaType
+        });
+
+        try {
+            const result = await fetch(TagManager.API_URL, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log(response);
+
+            if (!response.success) {
+                console.warn("Échec de la récupération des tags TMDb:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête getTagsByTmdbId :", error);
+            return { success: false, message: "Erreur réseau", tags: [] };
+        }
+    }
+
+    /**
+     * Basculer le tag 'liked' pour un film TMDb
+     * @param {number} userId - ID de l'utilisateur
+     * @param {number} tmdbId - ID TMDb du film
+     * @param {string} mediaType - Type de média ('movie' ou 'tv')
+     * @returns {Promise<Object>} Réponse de l'API avec l'état du tag
+     */
+    static async toggleTmdbLike(userId, tmdbId, mediaType = 'movie') {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({
+            action: 'toggleTmdbLike',
+            userId: userId,
+            tmdbId: tmdbId,
+            mediaType: mediaType
+        });
+
+        try {
+            const result = await fetch(TagManager.API_URL, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log(response);
+
+            if (response.success) {
+                console.log("Like TMDb basculé:", response.state);
+            } else {
+                console.warn("Échec du basculement du like TMDb:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête toggleTmdbLike :", error);
+            return { success: false, message: "Erreur réseau" };
+        }
+    }
+
+    /**
+     * Basculer le tag 'disliked' pour un film TMDb
+     * @param {number} userId - ID de l'utilisateur
+     * @param {number} tmdbId - ID TMDb du film
+     * @param {string} mediaType - Type de média ('movie' ou 'tv')
+     * @returns {Promise<Object>} Réponse de l'API avec l'état du tag
+     */
+    static async toggleTmdbDislike(userId, tmdbId, mediaType = 'movie') {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({
+            action: 'toggleTmdbDislike',
+            userId: userId,
+            tmdbId: tmdbId,
+            mediaType: mediaType
+        });
+
+        try {
+            const result = await fetch(TagManager.API_URL, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log(response);
+
+            if (response.success) {
+                console.log("Dislike TMDb basculé:", response.state);
+            } else {
+                console.warn("Échec du basculement du dislike TMDb:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête toggleTmdbDislike :", error);
+            return { success: false, message: "Erreur réseau" };
+        }
+    }
+
+    /**
+     * Basculer un tag personnalisé pour un film TMDb
+     * @param {number} userId - ID de l'utilisateur
+     * @param {number} tmdbId - ID TMDb du film
+     * @param {string} mediaType - Type de média ('movie' ou 'tv')
+     * @param {string} tagName - Nom du tag
+     * @returns {Promise<Object>} Réponse de l'API avec l'état du tag
+     */
+    static async toggleTmdbTag(userId, tmdbId, mediaType = 'movie', tagName) {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({
+            action: 'toggleTmdbTag',
+            userId: userId,
+            tmdbId: tmdbId,
+            mediaType: mediaType,
+            tag: tagName
+        });
+
+        try {
+            const result = await fetch(TagManager.API_URL, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log(response);
+
+            if (response.success) {
+                console.log("Tag TMDb basculé:", tagName, response.state);
+            } else {
+                console.warn("Échec du basculement du tag TMDb:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête toggleTmdbTag :", error);
+            return { success: false, message: "Erreur réseau" };
+        }
+    }
+
+    /**
+     * Afficher une notification temporaire
+     * @param {string} message - Message à afficher
+     * @param {string} type - Type de notification ('success', 'error', 'info')
+     */
+    static showNotification(message, type = 'info') {
+        // Créer l'élément de notification
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        `;
+
+        // Ajouter au DOM
+        document.body.appendChild(notification);
+
+        // Retirer après 3 secondes
+        setTimeout(() => {
+            notification.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
 }
 
 export default TagManager;
