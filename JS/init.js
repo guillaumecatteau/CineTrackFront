@@ -31,14 +31,197 @@ const initialAuthMarkup = authContainer ? authContainer.innerHTML : "";
 // ═══════════════════════════════════════════════════
 
 /**
+ * Afficher les films trending dans le conteneur de résultats
+ * @param {Array} movies - Liste des films à afficher
+ */
+const displayTrendingMovies = (movies) => {
+	if (!resultsContainer) return;
+
+	// Vider le conteneur
+	resultsContainer.innerHTML = '';
+
+	// Si aucun résultat
+	if (!movies || movies.length === 0) {
+		resultsContainer.innerHTML = '<p class="no-results">Aucun film trending disponible</p>';
+		return;
+	}
+
+	// Créer les cartes de films
+	movies.forEach(movie => {
+		const movieCard = createMovieCard(movie);
+		resultsContainer.appendChild(movieCard);
+	});
+};
+
+/**
+ * Créer une carte de film
+ * @param {Object} movie - Objet film de TMDb
+ * @returns {HTMLElement} Élément DOM de la carte
+ */
+const createMovieCard = (movie) => {
+	const card = document.createElement('div');
+	card.classList.add('movie-card');
+	card.dataset.movieId = movie.id;
+
+	// URL de l'image (TMDb utilise des chemins relatifs)
+	const posterUrl = movie.poster_path 
+		? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+		: 'images/no-poster.png'; // Placeholder si pas d'image
+
+	// Titre (peut être "title" pour les films ou "name" pour les séries)
+	const title = movie.title || movie.name || 'Sans titre';
+
+	// Date de sortie
+	const releaseDate = movie.release_date || movie.first_air_date || '';
+	const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
+
+	// Note moyenne
+	const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+
+	// Type de média (movie ou tv)
+	const mediaType = movie.media_type === 'tv' ? 'TV' : movie.media_type === 'movie' ? 'Film' : '';
+
+	card.innerHTML = `
+		<div class="movie-poster">
+			<img src="${posterUrl}" alt="${title}" loading="lazy">
+			<div class="movie-rating">⭐ ${rating}</div>
+			${mediaType ? `<div class="movie-type">${mediaType}</div>` : ''}
+		</div>
+		<div class="movie-info">
+			<h3 class="movie-title">${title}</h3>
+			${year ? `<p class="movie-year">${year}</p>` : ''}
+		</div>
+	`;
+
+	// Événement au clic pour afficher les détails
+	card.addEventListener('click', () => {
+		showMovieDetails(movie.id, movie.media_type || 'movie');
+	});
+
+	return card;
+};
+
+/**
+ * Afficher les détails d'un film (à implémenter plus tard)
+ * @param {number} movieId - ID TMDb du film
+ * @param {string} mediaType - Type de média (movie ou tv)
+ */
+const showMovieDetails = (movieId, mediaType) => {
+	console.log(`Afficher les détails du ${mediaType} avec ID: ${movieId}`);
+	// TODO: Implémenter l'affichage des détails dans une modale
+};
+
+/**
+ * Charger et afficher les films trending au démarrage
+ */
+const loadTrendingMovies = async () => {
+	try {
+		const response = await SearchManager.getTrending('all', 'day', 'fr-EU', 1);
+		
+		if (response.success && response.results) {
+			displayTrendingMovies(response.results);
+		} else {
+			console.error('Erreur lors du chargement des trending:', response.message);
+			if (resultsContainer) {
+				resultsContainer.innerHTML = '<p class="error-message">Erreur lors du chargement des films trending</p>';
+			}
+		}
+	} catch (error) {
+		console.error('Erreur lors du chargement des trending:', error);
+		if (resultsContainer) {
+			resultsContainer.innerHTML = '<p class="error-message">Erreur de connexion</p>';
+		}
+	}
+};
+
+/**
+ * Gérer la recherche avec filtres
+ * @param {Event} event - Événement de soumission du formulaire
+ */
+const handleSearch = async (event) => {
+	event.preventDefault();
+	
+	const title = titleInput.value.trim();
+	const year = yearInput.value.trim();
+	const type = typeSelect.value;
+	
+	// Si aucun filtre n'est renseigné, afficher les trending
+	if (!title && !year && !type) {
+		loadTrendingMovies();
+		return;
+	}
+	
+	// Si un titre est renseigné, faire une recherche
+	if (title) {
+		try {
+			let response;
+			
+			// Recherche selon le type
+			if (type === 'tv') {
+				response = await SearchManager.searchTV(title, 1, 'fr-EU');
+			} else {
+				response = await SearchManager.search(title, 1, year || null, 'fr-EU');
+			}
+			
+			if (response.success && response.results) {
+				// Filtrer par type si spécifié (pour la recherche de films)
+				let filteredResults = response.results;
+				if (type && type !== 'tv') {
+					filteredResults = filteredResults.filter(item => item.media_type === type);
+				}
+				
+				// Filtrer par année si spécifié
+				if (year) {
+					filteredResults = filteredResults.filter(item => {
+						const itemYear = item.release_date || item.first_air_date;
+						return itemYear && itemYear.startsWith(year);
+					});
+				}
+				
+				displayTrendingMovies(filteredResults);
+			} else {
+				resultsContainer.innerHTML = '<p class="no-results">Aucun résultat trouvé</p>';
+			}
+		} catch (error) {
+			console.error('Erreur lors de la recherche:', error);
+			resultsContainer.innerHTML = '<p class="error-message">Erreur lors de la recherche</p>';
+		}
+	} 
+	// Si seulement année et/ou type, filtrer les trending
+	else {
+		try {
+			const mediaType = type || 'all';
+			const response = await SearchManager.getTrending(mediaType, 'day', 'fr-EU', 1);
+			
+			if (response.success && response.results) {
+				let filteredResults = response.results;
+				
+				// Filtrer par année si spécifié
+				if (year) {
+					filteredResults = filteredResults.filter(item => {
+						const itemYear = item.release_date || item.first_air_date;
+						return itemYear && itemYear.startsWith(year);
+					});
+				}
+				
+				displayTrendingMovies(filteredResults);
+			} else {
+				resultsContainer.innerHTML = '<p class="no-results">Aucun résultat trouvé</p>';
+			}
+		} catch (error) {
+			console.error('Erreur lors du filtrage:', error);
+			resultsContainer.innerHTML = '<p class="error-message">Erreur lors du filtrage</p>';
+		}
+	}
+};
+
+/**
  * Mettre à jour l'état du bouton de recherche
  */
 const updateSearchButtonState = () => {
-	const hasTitle = titleInput.value.trim() !== "";
-	const hasYear = yearInput.value.trim() !== "";
-	const hasType = typeSelect.value !== "";
-
-	searchButton.disabled = !(hasTitle || hasYear || hasType);
+	// Le bouton est toujours actif maintenant
+	// Il permet de réinitialiser l'affichage avec les trending
+	searchButton.disabled = false;
 };
 
 /**
@@ -242,6 +425,11 @@ export function initInterface() {
 	}
 
 	// Initialiser la recherche
+	const searchForm = document.querySelector('.search-form');
+	if (searchForm) {
+		searchForm.addEventListener('submit', handleSearch);
+	}
+	
 	titleInput.addEventListener("input", updateSearchButtonState);
 	yearInput.addEventListener("input", updateSearchButtonState);
 	typeSelect.addEventListener("change", updateSearchButtonState);
@@ -271,6 +459,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	
 	// Initialiser la connexion (vérifier si déjà connecté)
 	initConnexion(renderSignInForm, renderSignUpForm);
+	
+	// Charger les films trending au démarrage
+	loadTrendingMovies();
 });
 
 // ═══════════════════════════════════════════════════

@@ -38,7 +38,7 @@
               type="number"
               id="year"
               name="year"
-              placeholder="YEARS"
+              placeholder="YEAR"
               min="1888"
               max="2100"
             />
@@ -46,10 +46,9 @@
 
           <div class="field-group">
             <select id="type" name="type">
-              <option value="" selected>CATEGORIES</option>
+              <option value="" selected>ALL CATEGORIES</option>
               <option value="movie">MOVIE</option>
-              <option value="series">SERIES</option>
-              <option value="episode">EPISODE</option>
+              <option value="tv">TV SERIES</option>
             </select>
           </div>
 
@@ -57,7 +56,6 @@
             type="submit"
             class="btn btn-primary"
             id="search-button"
-            disabled
           >
             Search
           </button>
@@ -69,6 +67,6 @@
       <div class="results-nav container" id="results-nav"></div>
     </main>
 
-    <script type="module" src="JS/init.js"></script>
+    <script type="module" src="JS/init.js?v=3"></script>
   </body>
 </html>
