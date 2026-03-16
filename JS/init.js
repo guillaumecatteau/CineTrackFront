@@ -9,7 +9,7 @@ import AuthManager from './Manager/AuthManager.js';
 import SearchManager from './Manager/SearchManager.js';
 import TagManager from './Manager/TagManager.js';
 import UserMovieManager from './Manager/UserMovieManager.js';
-import { handleConnexion, updateHeaderButtons, initConnexion } from './connexion.js';
+import { handleConnexion, handleRegistration, updateHeaderButtons, initConnexion } from './connexion.js';
 
 // ═══════════════════════════════════════════════════
 // CONSTANTES ET ÉLÉMENTS DOM
@@ -167,6 +167,9 @@ export const renderSignUpForm = () => {
 		],
 		validateButton
 	);
+
+	// Ajouter l'événement d'inscription
+	validateButton.addEventListener("click", () => handleRegistration(renderSignInForm, renderSignUpForm));
 
 	backButton.addEventListener("click", restoreInitialAuthButtons);
 };

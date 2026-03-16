@@ -29,6 +29,76 @@ export function initConnexion(renderSignInForm, renderSignUpForm) {
 }
 
 /**
+ * Gérer l'inscription d'un nouvel utilisateur
+ * @param {Function} renderSignInForm - Fonction pour afficher le formulaire de connexion
+ * @param {Function} renderSignUpForm - Fonction pour afficher le formulaire d'inscription
+ */
+export async function handleRegistration(renderSignInForm, renderSignUpForm) {
+    const usernameInput = document.getElementById('signup-username');
+    const mailInput = document.getElementById('signup-mail');
+    const passwordInput = document.getElementById('signup-password');
+    const usernameError = document.getElementById('signup-username-error');
+    const mailError = document.getElementById('signup-mail-error');
+    const passwordError = document.getElementById('signup-password-error');
+    const validateButton = document.getElementById('signup-validate');
+
+    if (!usernameInput || !mailInput || !passwordInput) {
+        console.error("Champs d'inscription introuvables");
+        return;
+    }
+
+    const username = usernameInput.value.trim();
+    const email = mailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // Désactiver le bouton pendant la requête
+    validateButton.disabled = true;
+    validateButton.textContent = "Inscription...";
+
+    try {
+        const response = await AuthManager.register(username, email, password);
+
+        if (response.success) {
+            console.log("Inscription réussie pour:", username);
+            // Afficher un message de succès puis rediriger vers connexion
+            alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+            renderSignInForm();
+        } else {
+            // Afficher les erreurs
+            if (response.errors) {
+                if (response.errors.username && usernameError) {
+                    usernameError.textContent = response.errors.username;
+                }
+                if (response.errors.email && mailError) {
+                    mailError.textContent = response.errors.email;
+                }
+                if (response.errors.password && passwordError) {
+                    passwordError.textContent = response.errors.password;
+                }
+            } else if (response.message) {
+                // Afficher le message d'erreur général
+                if (mailError) {
+                    mailError.textContent = response.message;
+                }
+            }
+            
+            // Réactiver le bouton
+            validateButton.disabled = false;
+            validateButton.textContent = "Validate";
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'inscription:", error);
+        if (mailError) {
+            mailError.textContent = "Erreur de connexion au serveur";
+        }
+        
+        // Réactiver le bouton
+        validateButton.disabled = false;
+        validateButton.textContent = "Validate";
+    }
+}
+
+/**
  * Gérer la connexion de l'utilisateur
  * @param {Function} renderSignInForm - Fonction pour afficher le formulaire de connexion
  * @param {Function} renderSignUpForm - Fonction pour afficher le formulaire d'inscription
