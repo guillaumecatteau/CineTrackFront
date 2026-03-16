@@ -4,8 +4,6 @@ import { initSearchControls } from "./modules/search-controls.js";
 import { createSelectionController } from "./modules/selection.js";
 import { getCurrentUser, isAuthenticated } from "./modules/session.js";
 
-const DESIGN_CONNECTED_UI_ONLY = true;
-
 document.addEventListener("DOMContentLoaded", () => {
 	const titleInput = document.getElementById("title");
 	const yearInput = document.getElementById("year");
@@ -44,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const selectionController = createSelectionController({
 		resultsContainer,
-		isUserConnected: DESIGN_CONNECTED_UI_ONLY ? () => true : isAuthenticated,
+		isUserConnected: isAuthenticated,
 		getCurrentUser
 	});
 

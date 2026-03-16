@@ -1,4 +1,4 @@
-export const connected = true;
+export const connected = false;
 
 export const RESULTS_PER_PAGE = 25;
 export const TOTAL_MOCK_RESULTS = 50;

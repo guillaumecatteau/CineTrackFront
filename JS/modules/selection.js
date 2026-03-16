@@ -1,9 +1,6 @@
 import { normalizeCount } from "./helpers.js";
 import { addUserMovie, getAllUserMovies, toggleDislike, toggleLike, updateUserMovie } from "./api.js";
 
-// Design guardrail: always expose connected controls in movie overlay.
-const DESIGN_CONNECTED_OVERLAY_ONLY = true;
-
 const THUMBS_UP_PATH = "M2 21h4V9H2v12zm19-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L12.17 1 5.59 7.59C5.22 7.95 5 8.45 5 9v10c0 1.1.9 2 2 2h9c.82 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z";
 const THUMBS_DOWN_PATH = "M15 3H6c-.82 0-1.54.5-1.84 1.22L1.14 11.27c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z";
 
@@ -447,13 +444,30 @@ export const createSelectionController = ({
 			summaryNode.textContent = coverSummary;
 		}
 
-		const userConnected = DESIGN_CONNECTED_OVERLAY_ONLY || getConnectionState();
+		const userConnected = getConnectionState();
 		if (connectTextNode && userActionsNode) {
 			connectTextNode.style.display = userConnected ? "none" : "block";
 			userActionsNode.style.display = userConnected ? "flex" : "none";
 		}
 		if (userConnected && userActionsNode) {
 			userActionsNode.style.display = "flex";
+			userActionsNode.style.visibility = "visible";
+			userActionsNode.style.opacity = "1";
+			userActionsNode.style.pointerEvents = "auto";
+
+			if (!userActionsNode.querySelector("[data-selection-action='add']")) {
+				userActionsNode.innerHTML = `
+					<button type="button" class="btn btn-primary" data-selection-action="add">Add to my list</button>
+					<button type="button" class="btn btn-secondary" data-selection-action="towatch">To watch</button>
+					<button type="button" class="btn btn-primary" data-selection-action="like">Like</button>
+					<button type="button" class="btn btn-secondary" data-selection-action="dislike">Dislike</button>
+				`;
+
+				likeButton = overlay.querySelector('[data-selection-action="like"]');
+				dislikeButton = overlay.querySelector('[data-selection-action="dislike"]');
+				addButton = overlay.querySelector('[data-selection-action="add"]');
+				toWatchButton = overlay.querySelector('[data-selection-action="towatch"]');
+			}
 		}
 		if (rateWrapNode) {
 			rateWrapNode.style.display = userConnected ? "flex" : "none";
@@ -470,8 +484,10 @@ export const createSelectionController = ({
 
 		if (userConnected) {
 			const user = getCurrentUser();
+			if (!user?.id) {
+				showActionMessage("Session utilisateur invalide. Reconnectez-vous.", true);
+			}
 			const imdbId = coverElement.dataset.imdbId || "";
-			const isSimulatedUser = !user?.id || user?.isSimulated;
 			let userMovieId = null;
 
 			const syncActionButtons = () => {
@@ -503,8 +519,8 @@ export const createSelectionController = ({
 				interactionState.rating = rating;
 				updateRateUi(rating);
 
-				if (isSimulatedUser) {
-					showActionMessage(`Rated ${rating.toFixed(1)}/5 (mode simulation)`);
+				if (!user?.id) {
+					showActionMessage("Impossible d'enregistrer la note sans connexion.", true);
 					return;
 				}
 
@@ -566,8 +582,8 @@ export const createSelectionController = ({
 					interactionState.inList = true;
 					syncActionButtons();
 
-					if (isSimulatedUser) {
-						showActionMessage("Film ajoute a votre liste (mode simulation)");
+					if (!user?.id) {
+						showActionMessage("Impossible sans connexion.", true);
 						return;
 					}
 
@@ -586,8 +602,8 @@ export const createSelectionController = ({
 					interactionState.toWatch = !interactionState.toWatch;
 					syncActionButtons();
 
-					if (isSimulatedUser) {
-						showActionMessage(interactionState.toWatch ? "Ajoute a To watch (mode simulation)" : "Retire de To watch (mode simulation)");
+					if (!user?.id) {
+						showActionMessage("Impossible sans connexion.", true);
 						return;
 					}
 
@@ -611,8 +627,8 @@ export const createSelectionController = ({
 					}
 					syncActionButtons();
 
-					if (isSimulatedUser) {
-						showActionMessage(interactionState.liked ? "Like active (mode simulation)" : "Like retire (mode simulation)");
+					if (!user?.id) {
+						showActionMessage("Impossible sans connexion.", true);
 						return;
 					}
 
@@ -636,8 +652,8 @@ export const createSelectionController = ({
 					}
 					syncActionButtons();
 
-					if (isSimulatedUser) {
-						showActionMessage(interactionState.disliked ? "Dislike active (mode simulation)" : "Dislike retire (mode simulation)");
+					if (!user?.id) {
+						showActionMessage("Impossible sans connexion.", true);
 						return;
 					}
 

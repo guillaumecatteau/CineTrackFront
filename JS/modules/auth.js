@@ -2,22 +2,6 @@ import { isValidEmail } from "./helpers.js";
 import { loginUser, registerUser } from "./api.js";
 import { clearCurrentUser, getCurrentUser, setCurrentUser } from "./session.js";
 
-// UI-only mode: always simulate login to design connected screens without backend dependency.
-const DESIGN_CONNECTED_UI_ONLY = true;
-
-const buildSimulatedUser = (email) => {
-	const localPart = String(email || "user").split("@")[0] || "user";
-	const safeUsername = localPart.replace(/[^a-zA-Z0-9_-]/g, "") || "user";
-
-	return {
-		id: 0,
-		email,
-		username: safeUsername,
-		createdAt: null,
-		isSimulated: true
-	};
-};
-
 const attachLiveValidation = (fields, submitButton) => {
 	const touchedFields = new Set();
 
@@ -452,40 +436,19 @@ export const initAuth = ({ authContainer }) => {
 			setStatusMessage(statusNode, "", "error");
 			connectButton.disabled = true;
 
-			if (DESIGN_CONNECTED_UI_ONLY) {
-				const simulatedUser = buildSimulatedUser(mailInput.value.trim() || "designer@cinetrack.local");
-				setCurrentUser(simulatedUser);
-				renderFeedbackState({
-					targetNode: authContainer,
-					title: "Connexion succesfull",
-					detail: "Mode design (simulation)",
-					type: "success"
-				});
-
-				window.setTimeout(() => {
-					renderConnectedState(simulatedUser);
-				}, 700);
-				return;
-			}
-
 			const response = await loginUser({
 				email: mailInput.value.trim(),
 				password: passwordInput.value
 			});
 
 			if (!response.success || !response.user) {
-				const simulatedUser = buildSimulatedUser(mailInput.value.trim());
-				setCurrentUser(simulatedUser);
 				renderFeedbackState({
 					targetNode: authContainer,
-					title: "Connexion succesfull",
-					detail: "Mode simulation active",
-					type: "success"
+					title: "Something went wrong",
+					detail: getErrorMessage(response, "Connexion echouee"),
+					type: "error",
+					withBack: true
 				});
-
-				window.setTimeout(() => {
-					renderConnectedState(simulatedUser);
-				}, 900);
 				return;
 			}
 
@@ -519,13 +482,6 @@ export const initAuth = ({ authContainer }) => {
 				closeSignUpOverlay();
 			}
 		});
-	}
-
-	if (DESIGN_CONNECTED_UI_ONLY) {
-		const simulatedUser = buildSimulatedUser("designer@cinetrack.local");
-		setCurrentUser(simulatedUser);
-		renderConnectedState(simulatedUser);
-		return;
 	}
 
 	const currentUser = getCurrentUser();
