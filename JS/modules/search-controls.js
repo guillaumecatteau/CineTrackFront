@@ -5,10 +5,8 @@ export const initSearchControls = ({ titleInput, yearInput, typeSelect, searchBu
 
 	const updateSearchButtonState = () => {
 		const hasTitle = titleInput.value.trim() !== "";
-		const hasYear = yearInput.value.trim() !== "";
-		const hasType = typeSelect.value !== "";
 
-		searchButton.disabled = !(hasTitle || hasYear || hasType);
+		searchButton.disabled = !hasTitle;
 	};
 
 	titleInput.addEventListener("input", updateSearchButtonState);

@@ -1,8 +1,10 @@
 import { initAuth } from "./modules/auth.js";
-import { connected } from "./modules/connexion-simulation.js";
 import { initResults } from "./modules/results.js";
 import { initSearchControls } from "./modules/search-controls.js";
 import { createSelectionController } from "./modules/selection.js";
+import { getCurrentUser, isAuthenticated } from "./modules/session.js";
+
+const DESIGN_CONNECTED_UI_ONLY = true;
 
 document.addEventListener("DOMContentLoaded", () => {
 	const titleInput = document.getElementById("title");
@@ -18,6 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
 		return;
 	}
 
+	const resetSearchFields = () => {
+		titleInput.value = "";
+		yearInput.value = "";
+		typeSelect.value = "";
+		searchButton.disabled = true;
+	};
+
+	resetSearchFields();
+
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) {
+			resetSearchFields();
+		}
+	});
+
 	initSearchControls({
 		titleInput,
 		yearInput,
@@ -27,7 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const selectionController = createSelectionController({
 		resultsContainer,
-		isUserConnected: connected
+		isUserConnected: DESIGN_CONNECTED_UI_ONLY ? () => true : isAuthenticated,
+		getCurrentUser
 	});
 
 	initResults({

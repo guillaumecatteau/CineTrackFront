@@ -37,9 +37,16 @@
                 <p class="selection-connect-text" data-selection="connect-text">connect to rate this movie</p>
 
                 <div class="selection-user-actions" data-selection="user-actions">
-                    <button type="button" class="btn btn-primary">👍</button>
-                    <button type="button" class="btn btn-secondary">👎</button>
-                    <button type="button" class="btn btn-primary">View</button>
+                    <button type="button" class="btn btn-primary" data-selection-action="add">Add to my list</button>
+                    <button type="button" class="btn btn-secondary" data-selection-action="towatch">To watch</button>
+                    <button type="button" class="btn btn-primary" data-selection-action="like">Like</button>
+                    <button type="button" class="btn btn-secondary" data-selection-action="dislike">Dislike</button>
+                </div>
+
+                <div class="selection-rate" data-selection="rate-wrap">
+                    <span class="selection-rate-label">Rate</span>
+                    <div class="selection-rate-stars" data-selection="rate-stars" aria-label="Rate movie"></div>
+                    <span class="selection-rate-value" data-selection="rate-value">0.0/5</span>
                 </div>
 
                 <button type="button" class="btn btn-secondary" data-selection="back-button">Back</button>
