@@ -6,7 +6,11 @@
 
 class AuthManager {
     
-    static API_URL = 'http://localhost/CineTrackBack/Api/auth.php';
+    static PROJECT_BASE = window.location.pathname.includes('/CineTrackFront/')
+        ? window.location.pathname.split('/CineTrackFront/')[0]
+        : '';
+
+    static API_URL = `${AuthManager.PROJECT_BASE}/CineTrackBack/Api/auth.php`;
 
     /**
      * Inscription d'un nouvel utilisateur

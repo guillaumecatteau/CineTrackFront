@@ -1,4 +1,4 @@
-/**
+﻿/**
  * init.js - Initialisation de l'interface et gestion des formulaires d'authentification
  */
 
@@ -10,6 +10,18 @@ import SearchManager from './Manager/SearchManager.js';
 import TagManager from './Manager/TagManager.js';
 import UserMovieManager from './Manager/UserMovieManager.js';
 import { handleConnexion, handleRegistration, updateHeaderButtons, initConnexion } from './connexion.js';
+
+const isLiveServerOrigin = window.location.port === '5500';
+let isRedirectingToApache = false;
+
+if (isLiveServerOrigin) {
+	const cinetrackPathMatch = window.location.pathname.match(/\/CineTrackFront\/.*$/);
+	const livePath = cinetrackPathMatch ? cinetrackPathMatch[0] : '/CineTrackFront/index.html';
+	const targetPath = livePath.startsWith('/CineTrackFront/') ? `/CineTrack${livePath}` : livePath;
+	const targetUrl = `http://localhost${targetPath}${window.location.search}${window.location.hash}`;
+	isRedirectingToApache = true;
+	window.location.replace(targetUrl);
+}
 
 // ═══════════════════════════════════════════════════
 // CONSTANTES ET ÉLÉMENTS DOM
@@ -332,14 +344,16 @@ const handleSearch = async (e) => {
 // INITIALISATION
 // ═══════════════════════════════════════════════════
 
-// Charger les films trending au démarrage
-loadTrendingMovies();
+if (!isRedirectingToApache) {
+	// Charger les films trending au démarrage
+	loadTrendingMovies();
 
-// Initialiser la connexion
-initConnexion();
+	// Initialiser la connexion
+	initConnexion();
 
-// Gérer la soumission du formulaire de recherche
-const searchForm = document.querySelector('.search-form');
-if (searchForm) {
-	searchForm.addEventListener('submit', handleSearch);
+	// Gérer la soumission du formulaire de recherche
+	const searchForm = document.querySelector('.search-form');
+	if (searchForm) {
+		searchForm.addEventListener('submit', handleSearch);
+	}
 }

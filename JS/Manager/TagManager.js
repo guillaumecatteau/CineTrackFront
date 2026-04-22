@@ -7,7 +7,11 @@
 
 class TagManager {
     
-    static API_URL = 'http://localhost/CineTrackBack/Api/tags.php';
+    static PROJECT_BASE = window.location.pathname.includes('/CineTrackFront/')
+        ? window.location.pathname.split('/CineTrackFront/')[0]
+        : '';
+
+    static API_URL = `${TagManager.PROJECT_BASE}/CineTrackBack/Api/tags.php`;
 
     /**
      * Ajouter un tag à un film

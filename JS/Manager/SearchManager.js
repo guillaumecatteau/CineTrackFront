@@ -6,7 +6,11 @@
 
 class SearchManager {
     
-    static API_URL = 'http://localhost/CineTrackBack/Api/search.php';
+    static PROJECT_BASE = window.location.pathname.includes('/CineTrackFront/')
+        ? window.location.pathname.split('/CineTrackFront/')[0]
+        : '';
+
+    static API_URL = `${SearchManager.PROJECT_BASE}/CineTrackBack/Api/search.php`;
 
     /**
      * Récupérer les films/séries trending

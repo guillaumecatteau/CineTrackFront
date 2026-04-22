@@ -7,7 +7,11 @@
 
 class UserMovieManager {
     
-    static API_URL = 'http://localhost/CineTrackBack/Api/user-movies.php';
+    static PROJECT_BASE = window.location.pathname.includes('/CineTrackFront/')
+        ? window.location.pathname.split('/CineTrackFront/')[0]
+        : '';
+
+    static API_URL = `${UserMovieManager.PROJECT_BASE}/CineTrackBack/Api/user-movies.php`;
 
     /**
      * Ajouter un film à la collection de l'utilisateur
