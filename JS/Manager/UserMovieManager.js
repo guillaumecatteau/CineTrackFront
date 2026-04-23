@@ -16,19 +16,21 @@ class UserMovieManager {
     /**
      * Ajouter un film à la collection de l'utilisateur
      * @param {number} userId - ID de l'utilisateur
-     * @param {string} imdbId - ID IMDb du film
+     * @param {number} tmdbId - ID TMDb du film
      * @param {boolean} isWatched - Film déjà regardé ou non (par défaut false)
-     * @param {number|null} rating - Note du film entre 1 et 10 (optionnel)
+     * @param {number|null} rating - Note du film entre 1 et 5 (optionnel)
+     * @param {string} mediaType - Type de média ('movie' ou 'tv', par défaut 'movie')
      * @returns {Promise<Object>} Réponse de l'API
      */
-    static async addMovie(userId, imdbId, isWatched = false, rating = null) {
+    static async addMovie(userId, tmdbId, isWatched = false, rating = null, mediaType = 'movie') {
         const headers = {
             'Content-Type': 'application/json'
         };
         const body = JSON.stringify({
             action: 'addMovie',
             userId: userId,
-            imdbId: imdbId,
+            tmdbId: tmdbId,
+            mediaType: mediaType,
             isWatched: isWatched,
             rating: rating
         });

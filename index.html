@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineTrack</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=32" />
   </head>
 
   <body>
@@ -17,14 +17,36 @@
         />
       </div>
       <div class="menu-actions" id="auth-container">
-        <button type="button" class="btn btn-primary" id="sign-up-trigger">
-          <span class="btn-icon" aria-hidden="true">+</span>Sign Up
-        </button>
-        <button type="button" class="btn btn-secondary" id="sign-in-trigger">
-          Sign In
+        <button type="button" class="btn btn-primary" id="sign-up-trigger">S'inscrire</button>
+        <button type="button" class="btn-auth-icon" id="sign-in-trigger" aria-label="Se connecter" title="Se connecter">
+          <svg class="auth-nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 23L12 23C11.4477 23 11 22.5523 11 22C11 21.4477 11.4477 21 12 21L20 21C20.5523 21 21 20.5523 21 20L21 4C21 3.44771 20.5523 3 20 3L12 3C11.4477 3 11 2.55228 11 2C11 1.44772 11.4477 1 12 1L20 0.999999C21.6569 0.999999 23 2.34315 23 4L23 20C23 21.6569 21.6569 23 20 23Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.6881 10.6901C19.3396 11.4418 19.3396 12.5581 18.6881 13.3098L14.5114 18.1291C13.2988 19.5282 11 18.6707 11 16.8193L11 15L5 15C3.89543 15 3 14.1046 3 13L3 11C3 9.89541 3.89543 8.99998 5 8.99998L11 8.99998L11 7.18071C11 5.3293 13.2988 4.47176 14.5114 5.87085L18.6881 10.6901ZM16.6091 12.6549C16.9348 12.279 16.9348 11.7209 16.6091 11.345L13 7.18071L13 9.49998C13 10.3284 12.3284 11 11.5 11L5 11L5 13L11.5 13C12.3284 13 13 13.6716 13 14.5L13 16.8193L16.6091 12.6549Z" fill="currentColor"/></svg>
         </button>
       </div>
     </nav>
+
+    <section id="user-collection" class="user-collection user-collection--collapsed" hidden>
+      <div class="user-collection-body">
+        <div class="container">
+          <div class="user-collection-header">
+            <span class="user-collection-title">Ma liste</span>
+            <select id="collection-filter" class="user-collection-filter" data-custom-select="6px">
+              <option value="towatch">&Agrave; voir</option>
+              <option value="watched">Vus</option>
+              <option value="liked">J'aime</option>
+              <option value="disliked">J'aime pas</option>
+            </select>
+          </div>
+          <div id="collection-strip" class="user-collection-strip">
+            <p class="user-collection-empty">Aucun film dans cette liste</p>
+          </div>
+        </div>
+      </div>
+      <button type="button" id="collection-toggle" class="user-collection-toggle" aria-label="Afficher/masquer ma liste">
+        <svg class="toggle-eye toggle-eye--open" viewBox="0 0 800 479.31" aria-hidden="true"><path d="M519.9,239.6c0,63.55-53.78,115.07-120.11,115.07s-120.11-51.52-120.11-115.07,53.78-115.07,120.11-115.07c66.34,0,120.11,51.52,120.11,115.07ZM400,0c-68.68.3-139.88,17.03-207.27,49.04-50.04,24.75-98.8,59.66-141.13,102.76C30.81,173.8,4.29,205.65,0,239.64c.51,29.44,32.09,65.78,51.6,87.84,39.7,41.4,87.19,75.35,141.13,102.79,62.85,30.5,132.41,48.06,207.27,49.04,68.75-.31,139.93-17.22,207.24-49.04,50.04-24.75,98.83-59.69,141.16-102.79,20.79-22,47.31-53.85,51.6-87.84-.51-29.44-32.09-65.78-51.6-87.84-39.7-41.4-87.22-75.32-141.16-102.76C544.43,18.56,474.69,1.12,400,0ZM399.95,59.5c104.08,0,188.45,80.66,188.45,180.17s-84.37,180.17-188.45,180.17-188.45-80.66-188.45-180.17S295.87,59.5,399.95,59.5h0Z"/></svg>
+        <svg class="toggle-eye toggle-eye--closed" viewBox="0 0 800 680.03" aria-hidden="true"><path d="M446.48,122.36c-15.26-1.65-30.77-2.6-46.48-2.83-68.68.3-139.88,17.01-207.28,49.02-50.04,24.75-98.78,59.69-141.11,102.78-20.79,22-47.32,53.85-51.61,87.84.51,29.44,32.1,65.78,51.61,87.84,39.7,41.4,87.17,75.34,141.11,102.78,1.83.89,3.67,1.77,5.52,2.64l-50.05,87.4,68,40.19L583.81,40.01,518.35,0l-71.87,122.36ZM601.71,166.01l-49.95,86.57c22.98,29.85,36.62,66.67,36.62,106.59,0,99.5-84.35,180.18-188.43,180.18-4.5,0-8.86-.49-13.28-.78l-33.06,57.23c15.25,1.63,30.66,2.82,46.39,3.03,68.75-.31,139.91-17.21,207.23-49.02,50.04-24.75,98.83-59.69,141.16-102.78,20.79-22,47.32-53.85,51.61-87.84-.51-29.44-32.1-65.78-51.61-87.84-39.7-41.4-87.22-75.34-141.16-102.78-1.82-.88-3.68-1.68-5.52-2.54h0ZM399.95,179c4.56,0,9.09.18,13.57.49l-38.72,67.04c-54.34,11.02-95.12,57.25-95.12,112.6,0,13.9,2.56,27.21,7.28,39.55,0,.01,0,.04,0,.05l-38.82,67.24c-23.03-29.88-36.62-66.82-36.62-106.79,0-99.5,84.35-180.17,188.43-180.17h0ZM512.6,320.36l-87.26,151.17c54.05-11.22,94.53-57.25,94.53-112.4,0-13.65-2.72-26.63-7.28-38.77h0Z"/></svg>
+        Ma Liste
+      </button>
+    </section>
 
     <main class="content">
       <div class="sectionDark">
@@ -39,7 +61,7 @@
               type="text"
               id="title"
               name="title"
-              placeholder="TITLE"
+              placeholder="Titre"
               autocomplete="off"
               autocapitalize="off"
               spellcheck="false"
@@ -48,26 +70,25 @@
 
           <div class="field-group">
             <input
-              type="number"
+              type="text"
               id="year"
               name="year"
-              placeholder="YEAR"
-              min="1888"
-              max="2100"
+              placeholder="Année"
+              maxlength="4"
               autocomplete="off"
             />
           </div>
 
           <div class="field-group">
-            <select id="type" name="type">
-              <option value="" selected>ALL CATEGORIES</option>
-              <option value="movie">MOVIE</option>
-              <option value="tv">TV SERIES</option>
+            <select id="type" name="type" data-custom-select="8px">
+              <option value="" selected>Toutes catégories</option>
+              <option value="movie">Film</option>
+              <option value="tv">Série TV</option>
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary" id="search-button">
-            Search
+          <button type="submit" class="btn-search" id="search-button" aria-label="Rechercher">
+            <svg class="search-icon-svg" viewBox="0 0 168.12 168.06" aria-hidden="true"><path d="M105.88,130.22c-32.97,19-71.94,8.88-92.29-18.57C-6.75,84.21-4.02,45.66,20.16,20.89,44.09-3.62,82.59-6.96,110.82,12.98c27.16,19.19,39.19,58.53,19.61,92.61,4.6,4.58,9.22,9.19,13.84,13.8,6.33,6.33,12.73,12.59,18.95,19.02,6.03,6.22,6.51,15.73,1.36,22.58-6.49,8.64-18.73,9.53-26.56,1.79-10.41-10.28-20.72-20.68-31.05-31.04-.46-.46-.78-1.08-1.09-1.52ZM69.83,25.34c-24.37-.06-44.56,19.84-44.65,44-.09,25.03,19.6,45.09,44.36,45.17,24.75.08,44.88-19.73,44.94-44.23.06-24.87-19.81-44.87-44.64-44.93Z"/></svg>
           </button>
         </form>
       </div>
@@ -84,13 +105,73 @@
           aria-labelledby="signup-overlay-title"
         >
           <div class="signup-overlay-header">
-            <h2 id="signup-overlay-title">Create your account</h2>
+            <h2 id="signup-overlay-title">Créer un compte</h2>
           </div>
           <div id="signup-overlay-content"></div>
         </div>
       </div>
     </main>
 
-    <script type="module" src="JS/init.js?v=3"></script>
+    <template id="selection-template">
+      <div class="selection-overlay">
+        <div class="selection-panel">
+          <button type="button" class="selection-close" data-selection="back-button" aria-label="Fermer">
+            <svg class="selection-close-icon" viewBox="0 0 799.85 685.6" aria-hidden="true"><path d="M0,342.4c0-46.4,9.07-90.67,27.2-132.8,18.13-42.13,42.4-78.67,72.8-109.6,30.4-30.93,66.93-55.2,109.6-72.8C252.27,9.6,296.8.53,343.2,0c46.4,0,90.67,9.07,132.8,27.2,42.13,18.13,78.67,42.4,109.6,72.8,30.93,30.4,55.2,66.93,72.8,109.6,17.6,42.67,26.67,86.93,27.2,132.8h57.6c12.27,0,22.93,3.47,32,10.4s15.73,15.47,20,25.6c4.27,10.13,5.6,20.8,4,32-1.6,11.2-6.93,21.07-16,29.6l-114.4,114.4c-11.2,11.2-24.53,16.8-40,16.8s-29.07-5.6-40.8-16.8l-114.4-114.4c-8.53-8.53-13.6-18.4-15.2-29.6-1.6-11.2-.53-21.87,3.2-32,3.73-10.13,10.4-18.67,20-25.6s20.53-10.4,32.8-10.4h56.8c0-41.07-10.13-79.2-30.4-114.4-20.27-35.2-48-62.93-83.2-83.2-35.2-20.27-73.33-30.4-114.4-30.4-41.07,0-79.47,10.13-115.2,30.4-35.73,20.27-63.47,48-83.2,83.2s-29.87,73.33-30.4,114.4c-.53,41.07,9.6,79.47,30.4,115.2,20.8,35.73,48.53,63.47,83.2,83.2,34.67,19.73,73.07,29.87,115.2,30.4,28.8,0,56.8-5.33,84-16l85.6,84.8c-52.27,30.4-108.8,45.6-169.6,45.6-46.93,0-91.47-9.07-133.6-27.2-42.13-18.13-78.67-42.4-109.6-72.8-30.93-30.4-55.2-66.93-72.8-109.6C9.6,433.33.53,388.8,0,342.4h0Z"/></svg>
+          </button>
+          <div class="selection-image-wrap">
+            <img class="selection-image" src="" alt="Movie poster" />
+          </div>
+          <div class="selection-details">
+            <h2 class="selection-title" data-selection="title">Titre inconnu</h2>
+
+            <div class="selection-meta">
+              <span class="selection-meta-item">
+                <span class="selection-meta-label">année</span>
+                <span class="selection-meta-value" data-selection="year">N/A</span>
+              </span>
+              <span class="selection-meta-separator" data-selection-separator="after-year">-</span>
+              <span class="selection-meta-item" data-selection-item="likes">
+                <span class="selection-icon" aria-hidden="true">
+                  <svg class="action-icon" viewBox="0 -0.5 21 21" aria-hidden="true"><g transform="translate(-219,-760)"><g transform="translate(56,160)" fill="currentColor"><path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/></g></g></svg>
+                </span>
+                <span class="selection-meta-value" data-selection="likes">0</span>
+              </span>
+              <span class="selection-meta-item" data-selection-item="dislikes">
+                <span class="selection-icon" aria-hidden="true">
+                  <svg class="action-icon" viewBox="0 -0.5 21 21" aria-hidden="true"><g transform="translate(-139,-760)"><g transform="translate(56,160)" fill="currentColor"><path d="M101.900089,600 L99.8000892,600 L99.8000892,611.987622 L101.900089,611.987622 C103.060339,611.987622 104.000088,611.093545 104.000088,609.989685 L104.000088,601.997937 C104.000088,600.894077 103.060339,600 101.900089,600 M87.6977917,600 L97.7000896,600 L97.7000896,611.987622 L95.89514,618.176232 C95.6819901,619.491874 94.2455904,620.374962 92.7902907,619.842512 C91.9198408,619.52484 91.400091,618.66273 91.400091,617.774647 L91.400091,612.986591 C91.400091,612.43516 90.9296911,611.987622 90.3500912,611.987622 L85.8728921,611.987622 C84.0259425,611.987622 82.6598928,610.35331 83.0746427,608.641078 L84.8995423,602.117813 C85.1998423,600.878093 86.360092,600 87.6977917,600"/></g></g></svg>
+                </span>
+                <span class="selection-meta-value" data-selection="dislikes">0</span>
+              </span>
+              <span class="selection-meta-separator" data-selection-separator="after-dislikes">-</span>
+              <div class="selection-stars" data-selection="stars"></div>
+            </div>
+
+            <div class="selection-summary">
+              <p class="selection-summary-text" data-selection="summary">Aucun résumé disponible.</p>
+            </div>
+
+            <p class="selection-connect-text" data-selection="connect-text">Connectez-vous pour noter ce film</p>
+
+            <div class="selection-add-block" data-selection="user-actions">
+              <span class="selection-add-label">Ajouter à ma liste :</span>
+              <div class="selection-user-actions">
+                <button type="button" class="btn btn-primary" data-selection-action="add">Vu</button>
+                <button type="button" class="btn btn-secondary" data-selection-action="towatch">À voir</button>
+                <button type="button" class="btn btn-primary" data-selection-action="like"><svg class="action-icon" viewBox="0 -0.5 21 21" aria-hidden="true"><g transform="translate(-219,-760)"><g transform="translate(56,160)" fill="currentColor"><path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/></g></g></svg>J'aime</button>
+                <button type="button" class="btn btn-secondary" data-selection-action="dislike"><svg class="action-icon" viewBox="0 -0.5 21 21" aria-hidden="true"><g transform="translate(-139,-760)"><g transform="translate(56,160)" fill="currentColor"><path d="M101.900089,600 L99.8000892,600 L99.8000892,611.987622 L101.900089,611.987622 C103.060339,611.987622 104.000088,611.093545 104.000088,609.989685 L104.000088,601.997937 C104.000088,600.894077 103.060339,600 101.900089,600 M87.6977917,600 L97.7000896,600 L97.7000896,611.987622 L95.89514,618.176232 C95.6819901,619.491874 94.2455904,620.374962 92.7902907,619.842512 C91.9198408,619.52484 91.400091,618.66273 91.400091,617.774647 L91.400091,612.986591 C91.400091,612.43516 90.9296911,611.987622 90.3500912,611.987622 L85.8728921,611.987622 C84.0259425,611.987622 82.6598928,610.35331 83.0746427,608.641078 L84.8995423,602.117813 C85.1998423,600.878093 86.360092,600 87.6977917,600"/></g></g></svg>J'aime pas</button>
+              </div>
+            </div>
+
+            <div class="selection-rate" data-selection="rate-wrap">
+              <span class="selection-rate-label">Ma note :</span>
+              <div class="selection-rate-stars" data-selection="rate-stars" aria-label="Rate movie"></div>
+              <span class="selection-rate-value" data-selection="rate-value">0/5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script type="module" src="JS/init.js?v=32"></script>
   </body>
 </html>

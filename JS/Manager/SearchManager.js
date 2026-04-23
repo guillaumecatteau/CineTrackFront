@@ -208,6 +208,44 @@ class SearchManager {
     }
 
     /**
+     * Découvrir des films/séries par année via l'endpoint /discover de TMDb
+     * @param {string} year - Année de sortie (ex: "2026")
+     * @param {string} mediaType - Type de média (movie, tv, all)
+     * @param {number} page - Numéro de la page (par défaut 1)
+     * @param {string} language - Langue des résultats (par défaut fr-EU)
+     * @returns {Promise<Object>} Réponse de l'API
+     */
+    static async discover(year, mediaType = 'movie', page = 1, language = 'fr-EU') {
+        const body = JSON.stringify({
+            action: 'discover',
+            year: year,
+            mediaType: mediaType,
+            language: language,
+            page: page,
+        });
+
+        try {
+            const result = await fetch(SearchManager.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: body,
+            });
+
+            const response = await result.json();
+            console.log('Discover results:', response);
+
+            if (!response.success) {
+                console.warn("Échec du discover:", response.message);
+            }
+
+            return response;
+        } catch (error) {
+            console.error("Erreur lors de la requête discover :", error);
+            return { success: false, message: "Erreur réseau" };
+        }
+    }
+
+    /**
      * Vérifier si le Bearer token TMDb est valide
      * @returns {Promise<Object>} Réponse de l'API
      */
